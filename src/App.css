@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+
+.accueil {
+
+  position: absolute; /* postulat de départ */
+  top: 50%; left: 50%; /* à 50%/50% du parent référent */
+  transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
+  
+  background-color: whitesmoke;
+}
+.signUpLoginBox{
+  position: absolute; /* postulat de départ */
+  top: 50%; left: 50%; /* à 50%/50% du parent référent */
+  transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
+}
+.logout-btn{
+  position: absolute;
+  margin: 20 px 0;
+  right:10px
+}
