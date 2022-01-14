@@ -1,35 +1,19 @@
-import React, { useState, useEffect, useContext} from 'react';
-import { FirebaseContext } from "../../Firebase";
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import {MDBNavbarNav , MDBNavItem, MDBCollapse} from "mdbreact";
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutInitiate } from '../../redux/actions/actions';
 
-const Logout = (props) => {
+const Logout = () => {
 
-    /* on récupère les methods de firebase.js grace UseContext
-     loginUser la mthode d'ont j'ai besoin  */
-     const firebase = useContext(FirebaseContext);
-
-    const [logout, setLogout] = useState(false);
-    console.log(logout, "111");
-
-    useEffect(() => {
-        if(logout){
-            console.log("Deconnexion 333");
-            firebase.signoutUser()
-            .then((result) => {
-                props.history.push("/");
-                console.log("Home");
-            }).catch((err) => {
-                
-            });
-
-        }
-        
-    }, [logout]);
+    const {currentUser} = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
     const handleLogout = () => {
-        setLogout(true);
-        console.log(logout, "déconnexion");
+       if(currentUser){
+           dispatch(logoutInitiate())
+       }
+        console.log("déconnexion");
     }
     return (
         

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext} from 'react';
-//import {Switch,Route} from "react-router-dom";
-import {Link} from "react-router-dom";
-import { FirebaseContext } from "../../Firebase";
+import React, { useState, useEffect} from 'react';
+import {Link, useHistory} from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { googleSignInInitiate, loginInitiate } from '../../redux/actions/actions';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -35,56 +36,50 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
   
-const  Login = (props) => {
+const  Login = () => {
 
     const classes = useStyles(); 
 
-    /* on récupère les methods de firebase.js grace UseContext
-     loginUser la mthode d'ont j'ai besoin  */
-    const firebase = useContext(FirebaseContext);
+    const [state, setState] = useState({
+        email: "",
+        password:""
+    });
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [btn, setbtn] = useState(false);
-    const [error, setError] = useState("");
+    const {email, password} = state;
+    const {currentUser} = useSelector((state) => state.user);
+    const history = useHistory();
+    const dispatch = useDispatch();
 
-    // [] tableau vide veut dire que le useEffect va se dclancher qu'une seule fois, c'est l'quivalent de componentDidmount
     useEffect(() => {
-        if(password.length > 5 && email !== ""){
-            setbtn(false)
-        } else if (btn) {
-            setbtn(true) // permet de disabeled le button quand la conditon n'est pas respecter une 2 ème fois
+        if(currentUser){
+            history.push("/dashboard")
         }
-    }, [password, email, btn])// [password, email, btn] represent la dpendence
+
+    }, [currentUser, history])
 
     const handleSubmit = e => {
  
-        e.preventDefault(); // éviter le rechargement de la page, sinon on risque de perdre les valeurs qu'on a dans les variables d'états
+        e.preventDefault();
         console.log(email, password);
 
-        firebase.loginUser(email, password)
-        .then(user => { // .then c'es tla rpense de loginUser qui veut dire qu'on a réusi à ce connecter 
-            console.log(email, password);
-            props.history.push("/dashboard");
-            setEmail("");
-            setPassword("");
-        })
-        .catch(error => {
-            // vider les champs quand la personne se trompe pour qu'elle puisse tenter de se connecter
-            setError(error);
-            setEmail("");
-            setPassword("");
-
-        })
+        if(!email || !password){
+            return;
+        }
+        dispatch(loginInitiate(email, password));
+        setState({email: "", password: ""});
     }
 
-        // gestion des erreurs
-        //const errorMessage = error !== '' && <span>{error.message}</span>;
+    const handleChange = (e) => {
+        let {name, value} = e.target;
+        setState({...state, [name]: value});    
+    }
+
+    const handleGoogleSignIn = () => {
+        dispatch(googleSignInInitiate());
+    }
 
         const disabled = email === "" || password === "";
         return(
-            
-            
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <div className={classes.paper}>
@@ -95,9 +90,17 @@ const  Login = (props) => {
                     <Typography component="h1" variant="h5">
                     Connexion
                     </Typography>
+                    <div className='social-login'>
+                        <button className='="btn google-btn social-btn' type="button" onClick={handleGoogleSignIn}>
+                            <span>
+                                <i className='fab fa-google-plus-g'></i> Sign in with Google
+                            </span>
+                        </button>
+                    </div>
                     <form className={classes.form} noValidate>
                     <TextField
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={handleChange}
+                        value={email}
                         variant="outlined"
                         margin="normal"
                         required
@@ -109,7 +112,8 @@ const  Login = (props) => {
                         autoFocus
                     />
                     <TextField
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={handleChange}
+                        value={password}
                         variant="outlined"
                         margin="normal"
                         required
@@ -155,24 +159,12 @@ const  Login = (props) => {
                     </Grid>
                     </form>
                 </div>
-            </Container>
-            
+            </Container>           
         )
 }
 
-
 export default Login;
 
-/* <div >
-
-                <form className="signUpLoginBox">
-                    <input onChange={(e) => setEmail(e.target.value)} id="email" name='email' placeholder='email'/>
-                    <input onChange={(e) => setPassword(e.target.value)} id="password" name='password' placeholder='password'/>
-                    
-                    <input onClick={handleSubmit} type="submit" value="Submit" />
-                    
-                </form>   
-            </div> */
 
 
 

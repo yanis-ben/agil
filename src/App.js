@@ -1,60 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {Switch,Route, BrowserRouter} from "react-router-dom";
 import './App.css';
 
 import {MesDocuments, Default, Navbar, Login, Home,Dashboard, Signup, ForgetPassword} from './Pages';
+import UserRoute from './components/UserRoute';
 
-
-// Switch sert à définir des route
-
-// comment afficher les routes personnelles(mesdocuments) privées après le login
-
-// dans app affiché que les routes publics <Route exact path="/" component={Accueil}/>   
 const  App = () => {
 
-  const [loggedInStatus, setLoggedInStatus] = useState("NOT_LOGGED_IN"); 
-  const [user, setUser] = useState({});
-
- const  handleLogin = (data) => {
-    setLoggedInStatus("LOGGED_IN");
-    setUser(data);
-  }
-
-  
     return(
-      <React.Fragment>
-            
+      <React.Fragment>    
             <Navbar/>
         <BrowserRouter>
           <Switch>
-          <Route 
-            exact
-            path="/" 
-            render={props => (
-              <Home {...props} handleLogin={handleLogin} />
-            )}
-            />  
+            <UserRoute exact path="/dashboard" component={Dashboard}/>
+            <Route exact path="/" component={Home}/>  
             <Route path="/login" component={Login}/>
             <Route path="/signup" component={Signup}/>
-            <Route path="/fo rgetPassword" component={ForgetPassword}/>
-     
+            <Route path="/forgetPassword" component={ForgetPassword}/> 
             <Route path="/mesDocuments" component={MesDocuments}/>
-
-            <Route  
-            exact 
-            path={"/dashboard"} 
-            render={props => (
-              <Dashboard {...props} handleLogin={handleLogin} loggedInStatus={loggedInStatus}/>
-            )}
-            />
             <Route component={Default}/> 
 
           </Switch>
-        </BrowserRouter>
-        
+        </BrowserRouter>     
       </React.Fragment>
-    );
-        
+    );   
 }
-
 export default App;

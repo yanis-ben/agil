@@ -7,16 +7,20 @@ import '@fortawesome/fontawesome-free/css/all.min.css'; import
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router} from "react-router-dom";
-import Firebase, { FirebaseContext } from "./Firebase";
+import { Provider } from "react-redux";
+import {store} from "./redux/store"
 
 ReactDOM.render(
   // instantiation de la class Firebase() pour que Firebase soit accecible par tout les composants
   // sera accecible via le consumer dans amm et tout les enfants 
-  <FirebaseContext.Provider value={new Firebase()}>
-    <Router>
-      <App />
-    </Router>
-  </FirebaseContext.Provider>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>,
+    </Provider>
+  </React.StrictMode>,
+  
   document.getElementById('root')
 );
 
