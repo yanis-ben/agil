@@ -1,9 +1,10 @@
 import firebase from "firebase/app";
-import "firebase/auth"
+import "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCFlVSxutjRZ24f31mz6HRPc668gWT5pz8",
   authDomain: "agil-779ba.firebaseapp.com",
+  databaseURL: "https://agil-779ba-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "agil-779ba",
   storageBucket: "agil-779ba.appspot.com",
   messagingSenderId: "850654398697",

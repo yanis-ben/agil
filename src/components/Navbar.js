@@ -1,4 +1,4 @@
-import {useHistory} from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Logout from "../Pages/Logout/Logout";
 import Button from '@material-ui/core/Button';
 import {
@@ -8,9 +8,8 @@ import {
 
 const Navbar = () => {
 
-      const history = useHistory();
-      const location = history.location.pathname.split('/').pop();
-      const isDashboard = location === "dashboard";
+      const {currentUser} = useSelector((state) => state.user);
+      const isLogged = Boolean(currentUser);
 
       return (       
       <MDBNavbar color="default-color" dark expand="md">
@@ -41,7 +40,7 @@ const Navbar = () => {
             </MDBNavItem>
 
             <MDBNavItem>
-              {isDashboard ?               
+              {isLogged ?               
                 <Logout/> 
               : 
                 <MDBNavItem>

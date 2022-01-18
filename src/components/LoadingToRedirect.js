@@ -23,4 +23,4 @@ const  LoadingToRedirect = () => {
     )
 }
 
-export default LoadingToRedirect
+export default LoadingToRedirect;

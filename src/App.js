@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch,Route, BrowserRouter} from "react-router-dom";
+import {Switch,Route} from "react-router-dom";
 import './App.css';
 
 import {MesDocuments, Default, Navbar, Login, Home,Dashboard, Signup, ForgetPassword} from './Pages';
@@ -10,7 +10,6 @@ const  App = () => {
     return(
       <React.Fragment>    
             <Navbar/>
-        <BrowserRouter>
           <Switch>
             <UserRoute exact path="/dashboard" component={Dashboard}/>
             <Route exact path="/" component={Home}/>  
@@ -19,9 +18,7 @@ const  App = () => {
             <Route path="/forgetPassword" component={ForgetPassword}/> 
             <Route path="/mesDocuments" component={MesDocuments}/>
             <Route component={Default}/> 
-
-          </Switch>
-        </BrowserRouter>     
+          </Switch> 
       </React.Fragment>
     );   
 }

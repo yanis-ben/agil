@@ -1,6 +1,5 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FirebaseContext } from "../../Firebase";
 import {useHistory, Link} from "react-router-dom";
 
 import Avatar from '@material-ui/core/Avatar';
@@ -14,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { registerInitiate } from "../../redux/actions/actions";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -39,48 +40,51 @@ const Signup = () => {
 
     const classes = useStyles(); 
 
-    // on récupère les methods de firebase.js grace au context
-    const firebase = useContext(FirebaseContext);
-    console.log(firebase);
+    const [inpuForm, setInpuForm] = useState({
+        displayName: "",
+        email: "",
+        password: "",
+        passwordConfirm: "",
+    })
+    const [visibility, setVisibility] = useState(false);
+    
 
-  const [state, setState] = useState({
-      displayName: "",
-      email: "",
-      password: "",
-      passwordConfirm: "",
-  })
+    const {displayName, email, password,  passwordConfirm} = inpuForm;
+    const {currentUser} = useSelector((state) => state.user);
+    const history = useHistory();
 
-  const {displayName, email, password,  passwordConfirm} = state;
-  const {currentUser} = useSelector((state) => state.user);
-  const history = useHistory();
+    useEffect(() => {
+        if(currentUser){
+            history.push("/dashboard")
+        }
 
-  useEffect(() => {
-      if(currentUser){
-          history.push("/dashboard")
-      }
+    }, [currentUser, history])
 
-  }, [currentUser, history])
-
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const handleSubmit = e => {
  
         e.preventDefault();
         console.log("infos : ", displayName, email, password, passwordConfirm);
 
-        // if(password !== passwordConfirm){
-        //     return;
-        // }
+        if(password !== passwordConfirm){
+            return;
+        }
         dispatch(registerInitiate(email, password));
-        setState({displayName: "", email: "", password: "", passwordConfirm: ""})
+        setInpuForm({displayName: "", email: "", password: "", passwordConfirm: ""})
     }
 
     const handleChange = (e) => {
         let {name, value} = e.target;
-        setState({...state, [name]: value});    
+        setInpuForm({...inpuForm, [name]: value});    
+    }
+    const handleVisibilityPwd = (e) => {
+        e.preventDefault();
+        setVisibility(!visibility); 
+        
     }
     
-    //const disabled = email === "" || password === "" || displayName === "" || passwordConfirm === "";
+    const disabled = email === "" || password === "" || displayName === "" || passwordConfirm === "";
     return (
         <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -98,7 +102,7 @@ const Signup = () => {
                 fullWidth
                 id="name"
                 label="name"
-                name="name"
+                name="displayName"
                 autoComplete="name"
                 autoFocus
             />
@@ -124,7 +128,7 @@ const Signup = () => {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={ visibility ? "text" : "password"}
                 id="password"
                 autoComplete="current-password"
             />
@@ -135,16 +139,21 @@ const Signup = () => {
                 margin="normal"
                 required
                 fullWidth
-                name="confirm password"
+                name="passwordConfirm"
                 label="confirm password"
-                type="confirm password"
+                type={ visibility ? "text" : "password"}
                 id="confirmPassword"
                 autoComplete="current-confirmPassword"
-            />   
+                
+            />     
             <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
             />
+            {visibility ? 
+            <VisibilityIcon onClick={handleVisibilityPwd}>Afficher password </VisibilityIcon>
+            : 
+            <VisibilityOffIcon onClick={handleVisibilityPwd} label="Afficher password"> Afficher password</VisibilityOffIcon>}  
             <Button
                 onClick={handleSubmit}
                 type="submit"
@@ -152,6 +161,7 @@ const Signup = () => {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                disabled = {disabled}
             >
                 Inscription
             </Button>
@@ -165,6 +175,7 @@ const Signup = () => {
                 </Link>
                 </Grid>
                 <Grid item>
+                
                 <Link 
                     to="/signup"
                     href="#" 

@@ -5,7 +5,10 @@ const Dashboard = () => {
     return (
         <div>
             <div>
-                Dashboard 
+                Dashboard 1
+            </div>
+            <div>
+                Dashboard 2
             </div>
         </div>
     )

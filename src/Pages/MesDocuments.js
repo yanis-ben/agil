@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 
-export default class MesDocuments extends Component{
+const MesDocuments = () => { 
   
-    render() {
-      console.log("documents")
       return (
         
           <div>
@@ -14,5 +12,7 @@ export default class MesDocuments extends Component{
           </div>
                
         );
-    }
+    
 }
+
+export default MesDocuments;

@@ -14,6 +14,10 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import GoogleIcon from '@mui/icons-material/Google';
+import {FcGoogle} from 'react-icons/fc';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -40,12 +44,13 @@ const  Login = () => {
 
     const classes = useStyles(); 
 
-    const [state, setState] = useState({
+    const [inputFormLogin, setInputFormLogin] = useState({
         email: "",
         password:""
     });
+    const [visibility, setVisibility] = useState(false);
 
-    const {email, password} = state;
+    const {email, password} = inputFormLogin;
     const {currentUser} = useSelector((state) => state.user);
     const history = useHistory();
     const dispatch = useDispatch();
@@ -66,16 +71,21 @@ const  Login = () => {
             return;
         }
         dispatch(loginInitiate(email, password));
-        setState({email: "", password: ""});
+        setInputFormLogin({email: "", password: ""});
     }
 
     const handleChange = (e) => {
         let {name, value} = e.target;
-        setState({...state, [name]: value});    
+        setInputFormLogin({...inputFormLogin, [name]: value});    
     }
 
     const handleGoogleSignIn = () => {
         dispatch(googleSignInInitiate());
+    }
+
+    const handleVisibilityPwd = (e) => {
+        e.preventDefault();
+        setVisibility(!visibility); 
     }
 
         const disabled = email === "" || password === "";
@@ -90,13 +100,13 @@ const  Login = () => {
                     <Typography component="h1" variant="h5">
                     Connexion
                     </Typography>
-                    <div className='social-login'>
-                        <button className='="btn google-btn social-btn' type="button" onClick={handleGoogleSignIn}>
-                            <span>
-                                <i className='fab fa-google-plus-g'></i> Sign in with Google
-                            </span>
-                        </button>
-                    </div>
+                    
+                        
+                          
+                    <FcGoogle onClick={handleGoogleSignIn}/>        
+
+                            
+                    
                     <form className={classes.form} noValidate>
                     <TextField
                         onChange={handleChange}
@@ -120,7 +130,7 @@ const  Login = () => {
                         fullWidth
                         name="password"
                         label="Password"
-                        type="password"
+                        type={visibility ? "text" : "password"}
                         id="password"
                         autoComplete="current-password"
                     />
@@ -128,6 +138,10 @@ const  Login = () => {
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
                     />
+                     {visibility ? 
+                    <VisibilityIcon onClick={handleVisibilityPwd}>Afficher password </VisibilityIcon>
+                    : 
+                    <VisibilityOffIcon onClick={handleVisibilityPwd} label="Afficher password"> Afficher password</VisibilityOffIcon>}  
                     <Button
                         onClick={handleSubmit}
                         type="submit"
@@ -164,7 +178,3 @@ const  Login = () => {
 }
 
 export default Login;
-
-
-
-
