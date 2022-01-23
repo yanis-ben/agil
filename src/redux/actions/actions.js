@@ -1,5 +1,10 @@
 import { auth, googleAuthProvider } from "../../Firebase/firebase";
 import * as types from "../actions-type/actionType";
+import { 
+    collection, 
+    addDoc,
+  } from "firebase/firestore";
+  import {db} from "../../Firebase/firebase";
 
 
 // SignUp actions
@@ -78,6 +83,33 @@ export const googleSignInFail = (error) => ({
     payload: error,
 })
 
+export const createUserDocStart = () => ({
+  type : types.CREATE_USER_START,
+})
+
+export const stateDoc = {
+    name : "",
+    age : 0,
+}
+export const createUserDocSuccess = () => ({
+    type : types.CREATE_USER_SUCCESS,
+    payload : stateDoc,
+  })
+
+  export const createUserDocFail = () => ({
+    type : types.CREATE_USER_FAIL,
+  })
+
+
+
+  export const createUserDocInitiate = (name, age) => {
+      return function (dispatch) {
+          dispatch(createUserDocSuccess(name, age));
+          const userCollectionRef = collection(db, "users");
+          addDoc(userCollectionRef, {name , age })
+      }
+  }
+
 // SignUp
 export const registerInitiate = (email, password) => {
     return function (dispatch) {
@@ -132,7 +164,7 @@ export const ressetPasswordInitiate = (email) => {
 }
 
 // Google
-export const googleSignInInitiate = (email, password) => {
+export const googleSignInInitiate = () => {
     return function (dispatch) {
         dispatch(googleSignInStart());
         auth

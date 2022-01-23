@@ -6,6 +6,22 @@ const initialState = {
     error: null,
 };
 
+const DocUser = {
+    name: "",
+    Age: 0
+}
+const DocUserReducer = (state = DocUser, action) => {
+    switch(action.type){
+        case types.CREATE_USER_SUCCESS:
+            return {
+                ...state,
+                name: action.payload,
+                age: action.payload
+            }
+            default: 
+        return state;
+    }
+}
 const userReducer = (state = initialState, action) => {
     switch(action.type){
         case types.REGISTER_START:
