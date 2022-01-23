@@ -6,6 +6,7 @@ import MesDocuments from "./MesDocuments";
 import Dashboard from "./Dashboard/Dashboard";
 import Signup from "./Signup/Signup";
 import ForgetPassword from "./ForgetPassword/ForgetPassword";
+import Catalog from "./Catalog/Catalog";
 
 
 export {
@@ -16,5 +17,6 @@ export {
     Login, 
     Home,
     Signup,
-    ForgetPassword
+    ForgetPassword,
+    Catalog,
 }
