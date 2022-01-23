@@ -9,6 +9,7 @@ import {createUserDocInitiate} from "../../redux/actions/actions"
 
 import {db} from "../../Firebase/firebase";
 import { useDispatch } from 'react-redux';
+import {Catalog} from "../";
 
 const StyledHome = styled.div`
 background-color: red;
@@ -60,12 +61,13 @@ useEffect(() => {
         {users.map((user) => {
           return (
             <div>
-              <h1>Name : {user.name}</h1>
+              <h1>Offre : {user.offre}</h1>
               <h1>Age : {user.age}</h1>
+              {/* <h1>offre : {user.age}</h1> */}
             </div>
           )
         })}
-  
+  <Catalog/>
 </div>
     );
   
